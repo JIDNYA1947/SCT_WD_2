@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StopWatch Pro Dashboard</title>
+<link rel="icon" href="assets/favicon.ico">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark"><i class="fa-solid fa-stopwatch"></i></div>
+      <span class="logo-text">StopWatch<span>Pro</span></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="stopwatch">
+        <i class="fa-solid fa-stopwatch"></i><span>Stopwatch</span>
+      </button>
+      <button class="nav-item" data-page="history">
+        <i class="fa-solid fa-list-check"></i><span>Lap History</span>
+      </button>
+      <button class="nav-item" data-page="statistics">
+        <i class="fa-solid fa-chart-line"></i><span>Statistics</span>
+      </button>
+      <button class="nav-item" data-page="settings">
+        <i class="fa-solid fa-sliders"></i><span>Settings</span>
+      </button>
+      <button class="nav-item" data-page="about">
+        <i class="fa-solid fa-circle-info"></i><span>About</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <i class="fa-solid fa-moon"></i>
+        <span>Dark Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main-wrap">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <button class="hamburger" id="hamburger"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-welcome">
+        <h1>Welcome Back, <span>Runner</span> <i class="fa-solid fa-hand-sparkles"></i></h1>
+        <p>Track your time with precision</p>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" id="darkModeBtn" title="Toggle dark / light">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+        </button>
+        <button class="icon-btn" id="notifBtn" title="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <div class="profile">
+          <div class="avatar">RS</div>
+          <div class="profile-info">
+            <strong>Ravi Sharma</strong>
+            <small>Pro Member</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE: DASHBOARD / STOPWATCH -->
+    <section class="page active" id="page-dashboard">
+      <div class="dashboard-grid">
+
+        <!-- CENTER: STOPWATCH CARD -->
+        <div class="stopwatch-card glass">
+          <div class="stopwatch-card-head">
+            <h2><i class="fa-solid fa-bolt"></i> Live Session</h2>
+            <span class="status-pill" id="statusPill">Idle</span>
+          </div>
+
+          <div class="sw-display" id="swDisplay">
+            <span class="sw-part" id="swHours">00</span><span class="sw-colon">:</span>
+            <span class="sw-part" id="swMinutes">00</span><span class="sw-colon">:</span>
+            <span class="sw-part" id="swSeconds">00</span><span class="sw-colon sw-colon-ms">:</span>
+            <span class="sw-part sw-ms" id="swMs">00</span>
+          </div>
+          <div class="sw-labels">
+            <span>HH</span><span>MM</span><span>SS</span><span>MS</span>
+          </div>
+
+          <div class="sw-controls">
+            <button class="sw-btn sw-start" id="startBtn"><i class="fa-solid fa-play"></i><span>Start</span></button>
+            <button class="sw-btn sw-pause" id="pauseBtn" disabled><i class="fa-solid fa-pause"></i><span>Pause</span></button>
+            <button class="sw-btn sw-lap" id="lapBtn" disabled><i class="fa-solid fa-flag"></i><span>Lap</span></button>
+            <button class="sw-btn sw-reset" id="resetBtn"><i class="fa-solid fa-rotate-left"></i><span>Reset</span></button>
+          </div>
+
+          <div class="shortcut-hint">
+            <span><kbd>Space</kbd> Start/Pause</span>
+            <span><kbd>L</kbd> Lap</span>
+            <span><kbd>R</kbd> Reset</span>
+          </div>
+
+          <!-- PROGRESS SECTION -->
+          <div class="progress-section">
+            <div class="progress-head">
+              <span>Session Progress <small>(vs. 10 min goal)</small></span>
+              <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">Start the clock to begin tracking your goal.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: STATS + ILLUSTRATION -->
+        <div class="side-col">
+
+          <div class="stat-grid">
+            <div class="stat-card glass" data-stat="totalTime">
+              <div class="stat-icon icon-purple"><i class="fa-solid fa-hourglass-half"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statTotalTime">00:00:00</span><span class="stat-label">Total Time</span></div>
+            </div>
+            <div class="stat-card glass" data-stat="totalLaps">
+              <div class="stat-icon icon-blue"><i class="fa-solid fa-flag-checkered"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statTotalLaps">0</span><span class="stat-label">Total Laps</span></div>
+            </div>
+            <div class="stat-card glass" data-stat="bestLap">
+              <div class="stat-icon icon-green"><i class="fa-solid fa-trophy"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statBestLap">--:--:--</span><span class="stat-label">Best Lap</span></div>
+            </div>
+            <div class="stat-card glass" data-stat="avgLap">
+              <div class="stat-icon icon-orange"><i class="fa-solid fa-calculator"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statAvgLap">--:--:--</span><span class="stat-label">Average Lap</span></div>
+            </div>
+            <div class="stat-card glass" data-stat="fastestLap">
+              <div class="stat-icon icon-pink"><i class="fa-solid fa-gauge"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statFastestLap">--:--:--</span><span class="stat-label">Fastest Lap</span></div>
+            </div>
+            <div class="stat-card glass" data-stat="slowestLap">
+              <div class="stat-icon icon-red"><i class="fa-solid fa-turtle"></i></div>
+              <div class="stat-info"><span class="stat-value" id="statSlowestLap">--:--:--</span><span class="stat-label">Slowest Lap</span></div>
+            </div>
+          </div>
+
+          <div class="illustration-card glass">
+            <div class="glow-orb"></div>
+            <i class="fa-solid fa-stopwatch illustration-icon"></i>
+            <p>Precision timing, beautifully visualized.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- GRAPH -->
+      <div class="graph-card glass">
+        <div class="graph-head">
+          <h2><i class="fa-solid fa-chart-line"></i> Lap Performance</h2>
+          <select id="graphFilter" class="select-neon">
+            <option value="all">All Laps</option>
+            <option value="fastest">Fastest 5</option>
+            <option value="slowest">Slowest 5</option>
+          </select>
+        </div>
+        <div class="graph-wrap">
+          <div id="lapChart" class="chart-container"></div>
+        </div>
+      </div>
+
+      <!-- LAP HISTORY TABLE -->
+      <div class="table-card glass" id="lapHistorySection">
+        <div class="table-head">
+          <h2><i class="fa-solid fa-list-check"></i> Lap History</h2>
+          <div class="table-actions">
+            <button class="ghost-btn" id="exportCsvBtn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+            <button class="ghost-btn danger" id="clearAllBtn"><i class="fa-solid fa-trash"></i> Clear All</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="lap-table">
+            <thead>
+              <tr>
+                <th>Lap No</th>
+                <th>Lap Time</th>
+                <th>Total Time</th>
+                <th>Difference</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="lapTableBody">
+              <tr class="empty-row"><td colspan="5">No laps recorded yet. Hit <strong>Lap</strong> during a session to log one.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: STATISTICS -->
+    <section class="page" id="page-statistics">
+      <div class="page-header"><h2><i class="fa-solid fa-chart-line"></i> Statistics</h2><p>A deeper look at every session you've timed.</p></div>
+      <div class="stat-grid stat-grid-wide">
+        <div class="stat-card glass"><div class="stat-icon icon-purple"><i class="fa-solid fa-hourglass-half"></i></div><div class="stat-info"><span class="stat-value" id="statTotalTime2">00:00:00</span><span class="stat-label">Total Time</span></div></div>
+        <div class="stat-card glass"><div class="stat-icon icon-blue"><i class="fa-solid fa-flag-checkered"></i></div><div class="stat-info"><span class="stat-value" id="statTotalLaps2">0</span><span class="stat-label">Total Laps</span></div></div>
+        <div class="stat-card glass"><div class="stat-icon icon-green"><i class="fa-solid fa-trophy"></i></div><div class="stat-info"><span class="stat-value" id="statBestLap2">--:--:--</span><span class="stat-label">Best Lap</span></div></div>
+        <div class="stat-card glass"><div class="stat-icon icon-orange"><i class="fa-solid fa-calculator"></i></div><div class="stat-info"><span class="stat-value" id="statAvgLap2">--:--:--</span><span class="stat-label">Average Lap</span></div></div>
+        <div class="stat-card glass"><div class="stat-icon icon-pink"><i class="fa-solid fa-gauge"></i></div><div class="stat-info"><span class="stat-value" id="statFastestLap2">--:--:--</span><span class="stat-label">Fastest Lap</span></div></div>
+        <div class="stat-card glass"><div class="stat-icon icon-red"><i class="fa-solid fa-turtle"></i></div><div class="stat-info"><span class="stat-value" id="statSlowestLap2">--:--:--</span><span class="stat-label">Slowest Lap</span></div></div>
+      </div>
+      <div class="graph-card glass">
+        <div class="graph-head"><h2><i class="fa-solid fa-chart-simple"></i> Full Lap Breakdown</h2></div>
+        <div class="graph-wrap"><div id="statsChart" class="chart-container"></div></div>
+      </div>
+    </section>
+
+    <!-- PAGE: SETTINGS -->
+    <section class="page" id="page-settings">
+      <div class="page-header"><h2><i class="fa-solid fa-sliders"></i> Settings</h2><p>Tune StopWatch Pro to how you like to work.</p></div>
+      <div class="settings-card glass">
+        <div class="settings-row">
+          <div class="settings-label"><i class="fa-solid fa-moon"></i><div><strong>Theme</strong><small>Switch between dark and light neon mode</small></div></div>
+          <label class="switch"><input type="checkbox" id="settingsThemeSwitch" checked><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label"><i class="fa-solid fa-floppy-disk"></i><div><strong>Auto Save</strong><small>Automatically save session &amp; laps to local storage</small></div></div>
+          <label class="switch"><input type="checkbox" id="settingsAutoSave" checked><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label"><i class="fa-solid fa-volume-high"></i><div><strong>Sound Effects</strong><small>Play a tone on start, lap and reset</small></div></div>
+          <label class="switch"><input type="checkbox" id="settingsSound"><span class="slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div class="settings-label"><i class="fa-solid fa-wand-magic-sparkles"></i><div><strong>Animations</strong><small>Enable glow, ripple and motion effects</small></div></div>
+          <label class="switch"><input type="checkbox" id="settingsAnimations" checked><span class="slider"></span></label>
+        </div>
+        <button class="ghost-btn danger full-width" id="resetSettingsBtn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset Settings to Default</button>
+      </div>
+    </section>
+
+    <!-- PAGE: ABOUT -->
+    <section class="page" id="page-about">
+      <div class="page-header"><h2><i class="fa-solid fa-circle-info"></i> About</h2><p>Everything you need to know about this app.</p></div>
+      <div class="about-grid">
+        <div class="about-card glass">
+          <div class="dev-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+          <h3>StopWatch Pro Dashboard</h3>
+          <p class="version-tag">Version 1.0.0</p>
+          <p>A modern, glassmorphic, neon-themed stopwatch dashboard built with pure HTML, CSS and vanilla JavaScript. Designed for runners, developers and anyone who lives by the clock.</p>
+        </div>
+        <div class="about-card glass">
+          <h3><i class="fa-solid fa-list-check"></i> Features</h3>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-check"></i> Start, pause, resume &amp; reset</li>
+            <li><i class="fa-solid fa-check"></i> Unlimited lap recording with live difference</li>
+            <li><i class="fa-solid fa-check"></i> Fastest, slowest, best &amp; average lap tracking</li>
+            <li><i class="fa-solid fa-check"></i> Real-time Chart.js performance graph</li>
+            <li><i class="fa-solid fa-check"></i> CSV export &amp; per-lap delete</li>
+            <li><i class="fa-solid fa-check"></i> Auto-save &amp; session restore via Local Storage</li>
+            <li><i class="fa-solid fa-check"></i> Keyboard shortcuts (Space / L / R)</li>
+            <li><i class="fa-solid fa-check"></i> Dark &amp; light neon themes, fully responsive</li>
+          </ul>
+        </div>
+        <div class="about-card glass dev-card">
+          <div class="dev-avatar small"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h3>Built by the StopWatch Pro Team</h3>
+            <p>Crafted with glassmorphism, neon gradients and a love for clean, modular JavaScript.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- App Scripts -->
+<script src="js/storage.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/statistics.js"></script>
+<script src="js/chart-engine.js"></script>
+<script src="js/stopwatch.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
